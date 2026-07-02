@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Almond House — Bobbatlu Demand Forecast | KPHB</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --maroon-950:#2b0e12; --maroon-900:#3d151a; --maroon-800:#551d23;
+    --saffron-500:#e0a336; --saffron-400:#eab657; --saffron-300:#f2cf8a;
+    --ivory:#faf5ec; --ivory-dim:#f0e7d6; --leaf-600:#4c7a5a; --clay-500:#c2603f;
+  }
+  *{box-sizing:border-box;}
+  body{ background:var(--ivory); font-family:'Space Grotesk', sans-serif; color:var(--maroon-950); }
+  .font-display{ font-family:'Fraunces', serif; }
+  .font-mono{ font-family:'JetBrains Mono', monospace; }
+  .paper-texture{ background-image: radial-gradient(circle at 1px 1px, rgba(43,14,18,0.055) 1px, transparent 0); background-size: 18px 18px; }
+  .seal{ background: conic-gradient(from 180deg, var(--saffron-400), var(--saffron-500), var(--clay-500), var(--saffron-500), var(--saffron-400));
+    -webkit-mask: radial-gradient(circle, transparent 0, transparent calc(100% - 30px), black calc(100% - 29px));
+    mask: radial-gradient(circle, transparent 0, transparent calc(100% - 30px), black calc(100% - 29px)); }
+  .stamp-border{ border: 2px solid var(--maroon-900); position: relative; }
+  .stamp-border::before{ content:''; position:absolute; inset:5px; border: 1px dashed rgba(43,14,18,0.35); pointer-events:none; }
+  .kpi-card{ background: var(--ivory); border: 1px solid rgba(43,14,18,0.14); transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
+  .kpi-card:hover{ transform: translateY(-3px); box-shadow: 0 14px 28px -14px rgba(43,14,18,0.35); border-color: rgba(43,14,18,0.28); }
+  .champion-glow{ box-shadow: 0 0 0 1px rgba(224,163,54,0.5), 0 18px 40px -18px rgba(224,163,54,0.55); }
+  .divider-motif{ background-image: repeating-linear-gradient(90deg, var(--maroon-900) 0 6px, transparent 6px 14px); height: 2px; }
+  table.ledger tbody tr:nth-child(odd){ background: rgba(224,163,54,0.08); }
+  table.ledger tbody tr:hover{ background: rgba(224,163,54,0.22); }
+  table.ledger th{ letter-spacing: .08em; }
+  .pulse-dot{ animation: pulse 2.4s ease-in-out infinite; }
+  @keyframes pulse{ 0%,100%{ opacity:1; transform:scale(1);} 50%{ opacity:.4; transform:scale(1.4);} }
+  ::selection{ background: var(--saffron-400); color: var(--maroon-950); }
+  @media (prefers-reduced-motion: reduce){ .kpi-card, .pulse-dot{ transition:none; animation:none; } }
+  .chart-wrap{ position:relative; height: 320px; }
+  .badge-accuracy{ font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body class="paper-texture">
+  <header class="border-b-2 border-[var(--maroon-900)] bg-[var(--maroon-950)] text-[var(--ivory)]">
+    <div class="max-w-7xl mx-auto px-6 md:px-10 py-7 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+      <div>
+        <p class="font-mono text-[11px] tracking-[0.35em] text-[var(--saffron-400)] uppercase mb-2">Forecasting Ledger · Store KPHB</p>
+        <h1 class="font-display text-4xl md:text-5xl leading-[1.05]">Almond House <span class="italic text-[var(--saffron-400)]">Bobbatlu</span></h1>
+        <p class="text-sm text-[var(--ivory-dim)] mt-2 max-w-lg">Demand &amp; revenue forecast review — Bellam Mithai line, Kondapur (KPHB) counter.</p>
+      </div>
+      <div class="flex items-center gap-3 font-mono text-xs text-[var(--ivory-dim)]">
+        <span class="w-2 h-2 rounded-full bg-[var(--saffron-400)] pulse-dot"></span>
+        <span>Run date: 02 Jul 2026, 12:04 IST</span>
+      </div>
+    </div>
+  </header>
+  <main class="max-w-7xl mx-auto px-6 md:px-10 py-10 space-y-12">
+    <section class="grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] gap-6">
+      <div class="stamp-border bg-[var(--ivory)] p-6 md:p-8">
+        <div class="flex items-start justify-between gap-4 mb-5">
+          <div>
+            <p class="font-mono text-[10px] tracking-[0.3em] text-[var(--maroon-800)] uppercase mb-1">Product Profile</p>
+            <h2 class="font-display text-3xl">Bobbatlu</h2>
+            <p class="text-sm text-[var(--maroon-800)]/80 mt-1">Sweet flatbread mithai · sold by weight</p>
+          </div>
+          <div class="seal w-16 h-16 shrink-0 grid place-items-center">
+            <span class="font-display text-[var(--maroon-950)] text-[10px] font-semibold text-center leading-tight">AH<br>FOOD</span>
+          </div>
+        </div>
+        <div class="divider-motif mb-5 opacity-60"></div>
+        <dl class="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-4 font-mono text-xs">
+          <div><dt class="uppercase tracking-wide text-[var(--maroon-800)]/60">Retail Code</dt><dd class="mt-1 text-sm font-medium">BELLAM MITHAI</dd></div>
+          <div><dt class="uppercase tracking-wide text-[var(--maroon-800)]/60">Division</dt><dd class="mt-1 text-sm font-medium">FOOD</dd></div>
+          <div><dt class="uppercase tracking-wide text-[var(--maroon-800)]/60">Category</dt><dd class="mt-1 text-sm font-medium">SWEET</dd></div>
+          <div><dt class="uppercase tracking-wide text-[var(--maroon-800)]/60">Inventory Type</dt><dd class="mt-1 text-sm font-medium">FINISHED GOODS</dd></div>
+          <div><dt class="uppercase tracking-wide text-[var(--maroon-800)]/60">Unit of Measure</dt><dd class="mt-1 text-sm font-medium">KGS</dd></div>
+          <div><dt class="uppercase tracking-wide text-[var(--maroon-800)]/60">Supply Nature</dt><dd class="mt-1 text-sm font-medium">B2C</dd></div>
+        </dl>
+      </div>
+      <div class="bg-[var(--maroon-900)] text-[var(--ivory)] p-6 md:p-8 flex flex-col justify-between">
+        <div>
+          <p class="font-mono text-[10px] tracking-[0.3em] text-[var(--saffron-400)] uppercase mb-1">Dataset Coverage</p>
+          <p class="font-display text-5xl mt-2">1,906</p>
+          <p class="text-sm text-[var(--ivory-dim)] mt-1">line-item rows aggregated at KPHB for Bobbatlu, Jan–May 2026</p>
+        </div>
+        <div class="divider-motif my-5 opacity-30"></div>
+        <div class="grid grid-cols-2 gap-4 font-mono text-xs">
+          <div><dt class="uppercase tracking-wide text-[var(--ivory-dim)]/70">Train window</dt><dd class="mt-1 text-sm">Jan 01 – Apr 30</dd></div>
+          <div><dt class="uppercase tracking-wide text-[var(--ivory-dim)]/70">Test window</dt><dd class="mt-1 text-sm">May 01 – May 21</dd></div>
+        </div>
+      </div>
+    </section>
+    <section>
+      <div class="flex items-baseline justify-between mb-4">
+        <h2 class="font-display text-2xl">Model Scorecard</h2>
+        <span class="font-mono text-[11px] uppercase tracking-widest text-[var(--maroon-800)]/60">Accuracy = 100 − MAPE</span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="kpi-card champion-glow p-6 relative overflow-hidden">
+          <span class="absolute top-3 right-3 text-[10px] font-mono uppercase tracking-widest bg-[var(--saffron-400)] text-[var(--maroon-950)] px-2 py-0.5 rounded-full font-semibold">Champion</span>
+          <p class="font-mono text-[10px] uppercase tracking-widest text-[var(--maroon-800)]/60 mb-2">Quantity Model</p>
+          <p class="font-display text-4xl">XGBoost</p>
+          <p class="badge-accuracy font-mono text-2xl mt-2 text-[var(--leaf-600)] font-semibold">63.91%</p>
+          <p class="text-xs text-[var(--maroon-800)]/70 mt-1">accuracy on May 1–21 quantity</p>
+        </div>
+        <div class="kpi-card p-6">
+          <p class="font-mono text-[10px] uppercase tracking-widest text-[var(--maroon-800)]/60 mb-2">Quantity Model</p>
+          <p class="font-display text-3xl">Prophet</p>
+          <p class="badge-accuracy font-mono text-2xl mt-2 text-[var(--clay-500)] font-semibold">46.48%</p>
+          <p class="text-xs text-[var(--maroon-800)]/70 mt-1">holiday-aware, flat growth</p>
+        </div>
+        <div class="kpi-card p-6">
+          <p class="font-mono text-[10px] uppercase tracking-widest text-[var(--maroon-800)]/60 mb-2">Quantity Model</p>
+          <p class="font-display text-3xl">LightGBM</p>
+          <p class="badge-accuracy font-mono text-2xl mt-2 text-[var(--clay-500)] font-semibold">35.96%</p>
+          <p class="text-xs text-[var(--maroon-800)]/70 mt-1">lag + rolling features</p>
+        </div>
+        <div class="kpi-card champion-glow p-6 relative overflow-hidden">
+          <span class="absolute top-3 right-3 text-[10px] font-mono uppercase tracking-widest bg-[var(--saffron-400)] text-[var(--maroon-950)] px-2 py-0.5 rounded-full font-semibold">Champion</span>
+          <p class="font-mono text-[10px] uppercase tracking-widest text-[var(--maroon-800)]/60 mb-2">Revenue Model</p>
+          <p class="font-display text-4xl">XGBoost</p>
+          <p class="badge-accuracy font-mono text-2xl mt-2 text-[var(--leaf-600)] font-semibold">35.65%</p>
+          <p class="text-xs text-[var(--maroon-800)]/70 mt-1">accuracy on May 1–21 net amount</p>
+        </div>
+      </div>
+      <div class="mt-4 grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="md:col-start-4 kpi-card p-6">
+          <p class="font-mono text-[10px] uppercase tracking-widest text-[var(--maroon-800)]/60 mb-2">Revenue Model</p>
+          <p class="font-display text-3xl">LightGBM</p>
+          <p class="badge-accuracy font-mono text-2xl mt-2 text-[var(--clay-500)] font-semibold">26.58%</p>
+          <p class="text-xs text-[var(--maroon-800)]/70 mt-1">lag + rolling features</p>
+        </div>
+      </div>
+      <p class="text-sm text-[var(--maroon-800)]/75 mt-4 max-w-3xl leading-relaxed">
+        XGBoost leads on both targets, but the gap is telling: it explains sales <span class="font-semibold">quantity</span> far better (63.91%) than <span class="font-semibold">revenue</span> (35.65%) — a sign that unit demand is more predictable than price-mix, which spikes around bulk or discounted transactions.
+      </p>
+    </section>
+    <section>
+      <div class="flex items-baseline justify-between mb-4">
+        <h2 class="font-display text-2xl">Actual vs. Predicted — May 1–21, 2026</h2>
+        <span class="font-mono text-[11px] uppercase tracking-widest text-[var(--maroon-800)]/60">XGBoost overlay</span>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="stamp-border bg-[var(--ivory)] p-5 md:p-6">
+          <p class="font-mono text-[11px] uppercase tracking-widest text-[var(--maroon-800)]/60 mb-1">Sales Quantity (kg)</p>
+          <div class="chart-wrap"><canvas id="qtyChart"></canvas></div>
+        </div>
+        <div class="stamp-border bg-[var(--ivory)] p-5 md:p-6">
+          <p class="font-mono text-[11px] uppercase tracking-widest text-[var(--maroon-800)]/60 mb-1">Net Revenue (₹)</p>
+          <div class="chart-wrap"><canvas id="revChart"></canvas></div>
+        </div>
+      </div>
+    </section>
+    <section>
+      <div class="flex items-baseline justify-between mb-4">
+        <h2 class="font-display text-2xl">Daily Ledger</h2>
+        <span class="font-mono text-[11px] uppercase tracking-widest text-[var(--maroon-800)]/60">21 rows · May 01–21</span>
+      </div>
+      <div class="stamp-border bg-[var(--ivory)] overflow-x-auto">
+        <table class="ledger w-full text-sm">
+          <thead>
+            <tr class="bg-[var(--maroon-950)] text-[var(--ivory)] text-left">
+              <th class="px-4 py-3 font-mono text-[10px] uppercase">Date</th>
+              <th class="px-4 py-3 font-mono text-[10px] uppercase text-right">Actual Qty (kg)</th>
+              <th class="px-4 py-3 font-mono text-[10px] uppercase text-right">XGB Pred Qty</th>
+              <th class="px-4 py-3 font-mono text-[10px] uppercase text-right">Actual Revenue (₹)</th>
+              <th class="px-4 py-3 font-mono text-[10px] uppercase text-right">XGB Pred Revenue (₹)</th>
+            </tr>
+          </thead>
+          <tbody id="ledgerBody" class="font-mono text-[13px]"></tbody>
+        </table>
+      </div>
+    </section>
+    <footer class="pt-6 pb-2 border-t border-[var(--maroon-900)]/20 text-center">
+      <p class="font-mono text-[11px] tracking-widest text-[var(--maroon-800)]/60 uppercase">Almond House · Internal Forecasting Review · Not for external distribution</p>
+    </footer>
+  </main>
+<script>
+  const dates = ['2026-05-01','2026-05-02','2026-05-03','2026-05-04','2026-05-05','2026-05-06','2026-05-07','2026-05-08','2026-05-09','2026-05-10','2026-05-11','2026-05-12','2026-05-13','2026-05-14','2026-05-15','2026-05-16','2026-05-17','2026-05-18','2026-05-19','2026-05-20','2026-05-21'];
+  const actualQty = [4.68,4.05,7.65,4.748,4.25,4.85,6.55,5.136,7.35,8.6625,3.90,5.74,6.40,2.45,3.55,7.39,4.96,3.00,3.55,4.00,3.60];
+  const predQty   = [5.32,5.90,5.69,4.83,4.51,5.13,4.76,5.37,5.66,6.79,5.16,5.62,6.86,9.08,8.17,6.35,6.35,6.93,4.17,5.42,5.40];
+  const actualRev = [5479.02,4504.72,8538.00,5393.08,4714.20,5185.66,7176.14,5799.56,7857.04,9716.64,4452.32,6432.34,6704.74,2723.78,4033.28,8501.44,5824.68,3299.98,3928.54,4295.22,4085.66];
+  const predRev   = [5783.05,5449.28,5505.85,5059.42,3962.67,5217.18,6592.76,6608.02,6504.49,6823.85,8476.78,6697.85,6745.21,6860.73,7789.17,6829.89,6829.89,10327.41,5000.40,4523.30,4732.23];
+  const shortDates = dates.map(d => d.slice(5));
+  const maroon = '#3d151a', saffron = '#e0a336';
+  const baseFont = { family: "'Space Grotesk', sans-serif", size: 11 };
+  function buildChart(ctxId, actual, predicted, actualLabel, predLabel, tickPrefix){
+    const ctx = document.getElementById(ctxId).getContext('2d');
+    return new Chart(ctx, {
+      type: 'line',
+      data: { labels: shortDates, datasets: [
+        { label: actualLabel, data: actual, borderColor: maroon, backgroundColor: maroon, borderWidth: 2.5, pointRadius: 3, pointBackgroundColor: maroon, tension: 0.3, fill: false },
+        { label: predLabel, data: predicted, borderColor: saffron, backgroundColor: saffron, borderWidth: 2.5, borderDash: [6,4], pointRadius: 3, pointStyle: 'rectRot', pointBackgroundColor: saffron, tension: 0.3, fill: false }
+      ]},
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: { position: 'top', align: 'end', labels: { font: baseFont, color: maroon, usePointStyle: true, boxWidth: 8 } },
+          tooltip: { backgroundColor: maroon, titleFont: { family: "'JetBrains Mono', monospace", size: 11 }, bodyFont: { family: "'JetBrains Mono', monospace", size: 11 }, padding: 10,
+            callbacks: { label: (item) => `${item.dataset.label}: ${tickPrefix}${item.formattedValue}` } }
+        },
+        scales: {
+          x: { grid: { color: 'rgba(61,21,26,0.08)' }, ticks: { font: baseFont, color: maroon } },
+          y: { grid: { color: 'rgba(61,21,26,0.08)' }, ticks: { font: baseFont, color: maroon, callback: (v) => tickPrefix + v } }
+        }
+      }
+    });
+  }
+  buildChart('qtyChart', actualQty, predQty, 'Actual Qty', 'XGBoost Predicted', '');
+  buildChart('revChart', actualRev, predRev, 'Actual Revenue', 'XGBoost Predicted', '₹');
+  const tbody = document.getElementById('ledgerBody');
+  dates.forEach((d, i) => {
+    const tr = document.createElement('tr');
+    tr.className = 'border-t border-[var(--maroon-900)]/10';
+    tr.innerHTML = `
+      <td class="px-4 py-2.5">${d}</td>
+      <td class="px-4 py-2.5 text-right">${actualQty[i].toFixed(2)}</td>
+      <td class="px-4 py-2.5 text-right text-[var(--maroon-800)]/80">${predQty[i].toFixed(2)}</td>
+      <td class="px-4 py-2.5 text-right">₹${actualRev[i].toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
+      <td class="px-4 py-2.5 text-right text-[var(--maroon-800)]/80">₹${predRev[i].toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+</script>
+</body>
+</html>
