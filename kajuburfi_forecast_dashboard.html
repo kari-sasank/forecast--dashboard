@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Almond House Analytics — Kaju Burfi Forecast | KPHB</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --maroon-950:#2b0e12; --maroon-900:#3d151a; --maroon-800:#551d23;
+    --saffron-500:#e0a336; --saffron-400:#eab657; --saffron-300:#f2cf8a;
+    --ivory:#faf5ec; --ivory-dim:#f0e7d6; --leaf-600:#4c7a5a; --clay-500:#c2603f;
+    --alert-600:#b23a2e;
+  }
+  *{box-sizing:border-box;}
+  body{ background:var(--ivory); font-family:'Space Grotesk', sans-serif; color:var(--maroon-950); }
+  .font-display{ font-family:'Fraunces', serif; }
+  .font-mono{ font-family:'JetBrains Mono', monospace; }
+  .paper-texture{ background-image: radial-gradient(circle at 1px 1px, rgba(43,14,18,0.055) 1px, transparent 0); background-size: 18px 18px; }
+  .stamp-border{ border: 2px solid var(--maroon-900); position: relative; }
+  .stamp-border::before{ content:''; position:absolute; inset:5px; border: 1px dashed rgba(43,14,18,0.35); pointer-events:none; }
+  .kpi-card{ background: var(--ivory); border: 1px solid rgba(43,14,18,0.14); transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
+  .kpi-card:hover{ transform: translateY(-3px); box-shadow: 0 14px 28px -14px rgba(43,14,18,0.35); border-color: rgba(43,14,18,0.28); }
+  .champion-glow{ box-shadow: 0 0 0 1px rgba(224,163,54,0.5), 0 18px 40px -18px rgba(224,163,54,0.55); }
+  .divider-motif{ background-image: repeating-linear-gradient(90deg, var(--maroon-900) 0 6px, transparent 6px 14px); height: 2px; }
+  table.ledger tbody tr:nth-child(odd){ background: rgba(224,163,54,0.08); }
+  table.ledger tbody tr:hover{ background: rgba(224,163,54,0.22); }
+  table.ledger th{ letter-spacing: .08em; }
+  tr.anomaly-row{ background: rgba(178,58,46,0.14) !important; }
+  tr.anomaly-row:hover{ background: rgba(178,58,46,0.24) !important; }
+  .pulse-dot{ animation: pulse 2.4s ease-in-out infinite; }
+  @keyframes pulse{ 0%,100%{ opacity:1; transform:scale(1);} 50%{ opacity:.4; transform:scale(1.4);} }
+  ::selection{ background: var(--saffron-400); color: var(--maroon-950); }
+  @media (prefers-reduced-motion: reduce){ .kpi-card, .pulse-dot{ transition:none; animation:none; } }
+  .chart-wrap{ position:relative; height: 380px; }
+  .badge-accuracy{ font-variant-numeric: tabular-nums; }
+  .scroll-table{ max-height: 480px; overflow-y: auto; }
+  .anomaly-tag{ background: var(--alert-600); color: var(--ivory); }
+</style>
+</head>
+<body class="paper-texture">
+
+  <header class="border-b-2 border-[var(--maroon-900)] bg-[var(--maroon-950)] text-[var(--ivory)]">
+    <div class="max-w-7xl mx-auto px-6 md:px-10 py-7 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+      <div>
+        <p class="font-mono text-[11px] tracking-[0.35em] text-[var(--saffron-400)] uppercase mb-2">Forecasting Ledger · Store KPHB</p>
+        <h1 class="font-display text-4xl md:text-5xl leading-[1.05]">Almond House <span class="italic text-[var(--saffron-400)]">Analytics</span></h1>
+        <p class="text-sm text-[var(--ivory-dim)] mt-2 max-w-lg">Kaju Burfi demand review — predictive model comparison, KPHB counter.</p>
+      </div>
+      <div class="flex items-center gap-3 font-mono text-xs text-[var(--ivory-dim)]">
+        <span class="w-2 h-2 rounded-full bg-[var(--saffron-400)] pulse-dot"></span>
+        <span>Run date: 02 Jul 2026, 12:32 IST</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-6 md:px-10 py-10 space-y-12">
+
+    <!-- CONTEXT STRIP -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="stamp-border bg-[var(--ivory)] p-5">
+        <p class="font-mono text-[10px] uppercase tracking-widest text-[var(--maroon-800)]/60">Product</p>
+        <p class="font-display text-2xl mt-1">Kaju Burfi</p>
+        <p class="text-xs text-[var(--maroon-800)]/70 mt-1">KPHB Store</p>
+      </div>
+      <div class="stamp-border bg-[var(--ivory)] p-5">
+        <p class="font-mono text-[10px] uppercase tracking-widest text-[var(--maroon-800)]/60">Timeline Analyzed</p>
+        <p class="font-display text-2xl mt-1">May 1 – May 21, 2026</p>
+        <p class="text-xs text-[var(--maroon-800)]/70 mt-1">21-day test window</p>
+      </div>
+      <div class="stamp-border bg-[var(--ivory)] p-5">
+        <p class="font-mono text-[10px] uppercase tracking-widest text-[var(--maroon-800)]/60">Training History</p>
+        <p class="font-display text-2xl mt-1">120 Daily Rows</p>
+        <p class="text-xs text-[var(--maroon-800)]/70 mt-1">Jan – Apr 2026</p>
+      </div>
+    </section>
+
+    <!-- LEADERBOARD -->
+    <section>
+      <div class="flex items-baseline justify-between mb-4">
+        <h2 class="font-display text-2xl">Executive Leaderboard</h2>
+        <span class="font-mono text-[11px] uppercase tracking-widest text-[var(--maroon-800)]/60">Accuracy excludes May 21 outlier</span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="kpi-card champion-glow p-6 relative overflow-hidden">
+          <span class="absolute top-3 right-3 text-[10px] font-mono uppercase tracking-widest bg-[var(--saffron-400)] text-[var(--maroon-950)] px-2 py-0.5 rounded-full font-semibold">Champion</span>
+          <p class="font-mono text-[10px] uppercase tracking-widest text-[var(--maroon-800)]/60 mb-2">Best Model</p>
+          <p class="font-display text-4xl">Prophet</p>
+          <p class="text-xs text-[var(--maroon-800)]/70 mt-1">Improved — Holiday + Payday regressors</p>
+          <p class="badge-accuracy font-mono text-3xl mt-3 text-[var(--leaf-600)] font-semibold">79.87%</p>
+        </div>
+        <div class="kpi-card p-6">
+          <p class="font-mono text-[10px] uppercase tracking-widest text-[var(--maroon-800)]/60 mb-2">Runner-Up</p>
+          <p class="font-display text-3xl">LightGBM</p>
+          <p class="text-xs text-[var(--maroon-800)]/70 mt-1">Tree-based, calendar features</p>
+          <p class="badge-accuracy font-mono text-3xl mt-3 text-[var(--clay-500)] font-semibold">78.99%</p>
+        </div>
+        <div class="kpi-card p-6">
+          <p class="font-mono text-[10px] uppercase tracking-widest text-[var(--maroon-800)]/60 mb-2">Baseline</p>
+          <p class="font-display text-3xl">XGBoost</p>
+          <p class="text-xs text-[var(--maroon-800)]/70 mt-1">Tree-based, calendar features</p>
+          <p class="badge-accuracy font-mono text-3xl mt-3 text-[var(--alert-600)] font-semibold">53.57%</p>
+        </div>
+        <div class="kpi-card p-6 bg-[var(--maroon-900)] text-[var(--ivory)]">
+          <p class="font-mono text-[10px] uppercase tracking-widest text-[var(--saffron-400)] mb-2">Data Engineering Win</p>
+          <p class="text-sm leading-relaxed mt-1">Indian Festival Holidays &amp; month-end Payday regressors integrated into Prophet to stabilize forecasting peaks.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHART -->
+    <section>
+      <div class="flex items-baseline justify-between mb-4 flex-wrap gap-2">
+        <h2 class="font-display text-2xl">Actual vs. Predicted — May 1–21, 2026</h2>
+        <span class="font-mono text-[11px] uppercase tracking-widest text-[var(--maroon-800)]/60">Champion model: Prophet</span>
+      </div>
+      <div class="stamp-border bg-[var(--ivory)] p-5 md:p-6">
+        <div class="chart-wrap"><canvas id="revChart"></canvas></div>
+      </div>
+      <div class="mt-4 flex items-start gap-3 bg-[rgba(178,58,46,0.08)] border-l-4 border-[var(--alert-600)] px-4 py-3">
+        <span class="anomaly-tag text-[10px] font-mono uppercase tracking-widest px-2 py-1 rounded-full shrink-0 mt-0.5">Flagged</span>
+        <p class="text-sm text-[var(--maroon-900)]">
+          <span class="font-semibold">May 21st is a statistical anomaly</span>, not a forecasting failure — actual sales collapsed to
+          <span class="font-mono font-semibold">₹1,877.16</span> against a predicted <span class="font-mono font-semibold">₹31,353.18</span>,
+          most likely an operational disruption (stock-out, closure, or logging gap) rather than a genuine demand shift.
+        </p>
+      </div>
+    </section>
+
+    <!-- TABLE -->
+    <section>
+      <div class="flex items-baseline justify-between mb-4">
+        <h2 class="font-display text-2xl">Daily Breakdown</h2>
+        <span class="font-mono text-[11px] uppercase tracking-widest text-[var(--maroon-800)]/60">21 rows · scrollable</span>
+      </div>
+      <div class="stamp-border bg-[var(--ivory)] scroll-table">
+        <table class="ledger w-full text-sm">
+          <thead class="sticky top-0 z-10">
+            <tr class="bg-[var(--maroon-950)] text-[var(--ivory)] text-left">
+              <th class="px-4 py-3 font-mono text-[10px] uppercase">Date</th>
+              <th class="px-4 py-3 font-mono text-[10px] uppercase text-right">Actual Sales (₹)</th>
+              <th class="px-4 py-3 font-mono text-[10px] uppercase text-right">Predicted Sales (₹)</th>
+              <th class="px-4 py-3 font-mono text-[10px] uppercase text-right">Absolute Error (₹)</th>
+              <th class="px-4 py-3 font-mono text-[10px] uppercase text-right">Error %</th>
+            </tr>
+          </thead>
+          <tbody id="ledgerBody" class="font-mono text-[13px]"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="pt-6 pb-2 border-t border-[var(--maroon-900)]/20 text-center">
+      <p class="font-mono text-[11px] tracking-widest text-[var(--maroon-800)]/60 uppercase">Almond House Analytics · Internal Forecasting Review · Not for external distribution</p>
+    </footer>
+
+  </main>
+
+<script>
+  const dates = ['May 01','May 02','May 03','May 04','May 05','May 06','May 07','May 08','May 09','May 10','May 11','May 12','May 13','May 14','May 15','May 16','May 17','May 18','May 19','May 20','May 21'];
+  const actual = [39628.62,33788.50,22629.98,20961.42,30242.76,22004.30,25028.56,33058.54,28365.64,31963.49,18980.02,27377.08,27427.14,27531.42,24246.37,18333.40,42911.48,21441.12,15955.68,23360.00,1877.16];
+  const predicted = [27477.37,27012.36,26915.05,23027.67,21489.11,26915.33,31005.61,27651.15,27186.14,27088.83,23201.45,21662.90,27089.11,31179.39,27824.93,27359.92,27262.62,23375.23,21836.68,27262.90,31353.18];
+
+  const maroon = '#3d151a';
+  const saffron = '#e0a336';
+  const alertRed = '#b23a2e';
+  const baseFont = { family: "'Space Grotesk', sans-serif", size: 11 };
+
+  const pointColors = actual.map((v,i) => i === actual.length - 1 ? alertRed : maroon);
+  const pointRadii = actual.map((v,i) => i === actual.length - 1 ? 7 : 3);
+
+  const ctx = document.getElementById('revChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: dates,
+      datasets: [
+        {
+          label: 'Actual Sales (₹)',
+          data: actual,
+          borderColor: maroon,
+          backgroundColor: maroon,
+          borderWidth: 2.5,
+          pointRadius: pointRadii,
+          pointBackgroundColor: pointColors,
+          pointBorderColor: pointColors,
+          tension: 0.3,
+          fill: false
+        },
+        {
+          label: 'Prophet Predicted (₹)',
+          data: predicted,
+          borderColor: saffron,
+          backgroundColor: saffron,
+          borderWidth: 2.5,
+          borderDash: [6,4],
+          pointRadius: 3,
+          pointStyle: 'rectRot',
+          pointBackgroundColor: saffron,
+          tension: 0.3,
+          fill: false
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { position: 'top', align: 'end', labels: { font: baseFont, color: maroon, usePointStyle: true, boxWidth: 8 } },
+        tooltip: {
+          backgroundColor: maroon,
+          titleFont: { family: "'JetBrains Mono', monospace", size: 11 },
+          bodyFont: { family: "'JetBrains Mono', monospace", size: 11 },
+          padding: 10,
+          callbacks: {
+            label: (item) => `${item.dataset.label}: ₹${item.formattedValue}`
+          }
+        }
+      },
+      scales: {
+        x: { grid: { color: 'rgba(61,21,26,0.08)' }, ticks: { font: baseFont, color: maroon } },
+        y: { grid: { color: 'rgba(61,21,26,0.08)' }, ticks: { font: baseFont, color: maroon, callback: (v) => '₹' + v.toLocaleString('en-IN') } }
+      }
+    }
+  });
+
+  const tbody = document.getElementById('ledgerBody');
+  dates.forEach((d, i) => {
+    const absError = Math.abs(actual[i] - predicted[i]);
+    const errorPct = (absError / actual[i]) * 100;
+    const isAnomaly = i === dates.length - 1;
+    const tr = document.createElement('tr');
+    tr.className = 'border-t border-[var(--maroon-900)]/10' + (isAnomaly ? ' anomaly-row' : '');
+    tr.innerHTML = `
+      <td class="px-4 py-2.5">${d}${isAnomaly ? ' <span class="anomaly-tag text-[9px] font-mono uppercase tracking-widest px-1.5 py-0.5 rounded-full ml-1">Outlier</span>' : ''}</td>
+      <td class="px-4 py-2.5 text-right">₹${actual[i].toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
+      <td class="px-4 py-2.5 text-right text-[var(--maroon-800)]/80">₹${predicted[i].toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
+      <td class="px-4 py-2.5 text-right">₹${absError.toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
+      <td class="px-4 py-2.5 text-right ${isAnomaly ? 'text-[var(--alert-600)] font-semibold' : ''}">${errorPct.toFixed(2)}%</td>
+    `;
+    tbody.appendChild(tr);
+  });
+</script>
+
+</body>
+</html>
